@@ -10,7 +10,7 @@ using WebApplication3.DbContexts;
 namespace WebApplication3.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20191015144930_db")]
+    [Migration("20191016143624_db")]
     partial class db
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -89,6 +89,19 @@ namespace WebApplication3.Migrations
                     b.ToTable("Quizs");
                 });
 
+            modelBuilder.Entity("WebApplication3.Models.Role", b =>
+                {
+                    b.Property<int>("RoleID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("RoleName");
+
+                    b.HasKey("RoleID");
+
+                    b.ToTable("Roles");
+                });
+
             modelBuilder.Entity("WebApplication3.Models.User", b =>
                 {
                     b.Property<long>("Id")
@@ -99,9 +112,13 @@ namespace WebApplication3.Migrations
 
                     b.Property<byte[]>("PasswordSalt");
 
+                    b.Property<int>("RoleID");
+
                     b.Property<string>("Username");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("RoleID");
 
                     b.ToTable("Users");
                 });
@@ -127,6 +144,14 @@ namespace WebApplication3.Migrations
                     b.HasOne("WebApplication3.Model.Quiz", "Quiz")
                         .WithMany("Questions")
                         .HasForeignKey("QuizID")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("WebApplication3.Models.User", b =>
+                {
+                    b.HasOne("WebApplication3.Models.Role", "Role")
+                        .WithMany("Users")
+                        .HasForeignKey("RoleID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

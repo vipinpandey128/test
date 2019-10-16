@@ -23,34 +23,43 @@ namespace WebApplication3.Controllers
             _config = config;
         }
 
-        [HttpPost("register")] //<host>/api/auth/register
-        public async Task<IActionResult> Register([FromBody] UserForRegisterDto userForRegisterDto){ //Data Transfer Object containing username and password.
+        [HttpPost("register")] // <host>/api/auth/register
+        public async Task<IActionResult> Register([FromBody] UserForRegisterDto userForRegisterDto){ // Data Transfer Object containing username and password.
             // validate request
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            userForRegisterDto.Username = userForRegisterDto.Username.ToLower(); //Convert username to lower case before storing in database.
+            try
+            {
+                userForRegisterDto.Username = userForRegisterDto.Username.ToLower(); // Convert username to lower case before storing in database.
 
-            if(await _repo.UserExists(userForRegisterDto.Username)) 
-                return BadRequest("Username is already taken");
+                if (await _repo.UserExists(userForRegisterDto.Username))
+                    return BadRequest("Username is already taken");
 
-            var userToCreate = new User{
-                Username = userForRegisterDto.Username
-            };
+                var userToCreate = new User
+                {
+                    Username = userForRegisterDto.Username,
+                    RoleID = userForRegisterDto.RoleID
+                };
 
-            var createUser = await _repo.Register(userToCreate, userForRegisterDto.Password);
+                var createUser = await _repo.Register(userToCreate, userForRegisterDto.Password);
 
-            return StatusCode(201);
+                return StatusCode(201);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] UserForLoginDto userForRegisterDto)
         {
             var userFromRepo = await _repo.Login(userForRegisterDto.Username.ToLower(), userForRegisterDto.Password);
-            if (userFromRepo == null) //User login failed
+            if (userFromRepo == null) // User login failed
                 return Unauthorized();
 
-            //generate token
+            // generate token
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_config.GetSection("AppSettings:Token").Value);
             var tokenDescriptor = new SecurityTokenDescriptor

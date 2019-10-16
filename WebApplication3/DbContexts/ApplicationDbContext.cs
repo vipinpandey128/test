@@ -13,5 +13,6 @@ namespace WebApplication3.DbContexts
         public DbSet<Questions> Questions { get; set; }
         public DbSet<Answers> Answers { get; set; }
         public DbSet<Choices> Choices { get; set; }
+        public DbSet<Role> Roles { get; set; }
     }
 }

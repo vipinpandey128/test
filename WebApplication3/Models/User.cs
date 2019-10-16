@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebApplication3.Models
 {
@@ -9,5 +10,13 @@ namespace WebApplication3.Models
         public string Username { get; set; }
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string ProfileImage { get; set; }
+        public DateTime CreateDate { get; set; }
+        public bool IsActive { get; set; }
+        public int RoleID { get; set; }
+
+        public virtual Role Role { get; set; }
     }
 }
