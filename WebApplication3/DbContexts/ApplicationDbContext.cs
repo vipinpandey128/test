@@ -14,5 +14,6 @@ namespace WebApplication3.DbContexts
         public DbSet<Answers> Answers { get; set; }
         public DbSet<Choices> Choices { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<EmailVerification> EmailVerifications { get; set; }
     }
 }

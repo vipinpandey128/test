@@ -18,5 +18,9 @@ namespace WebApplication3.Models
         public int RoleID { get; set; }
 
         public virtual Role Role { get; set; }
+
+        public long vID { get; set; }
+
+        public virtual EmailVerification EmailVerification { get; set; }
     }
 }

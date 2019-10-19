@@ -2,6 +2,7 @@
 using WebApplication3.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace WebApplication3.Repository
 {
@@ -65,6 +66,12 @@ namespace WebApplication3.Repository
             if (await _context.Users.AnyAsync(x => x.Username == username))
                 return true;
             return false;
+        }
+
+        public async Task<long> SentEmailVerification(string username)
+        {
+           var UserID = await _context.Users.Where(user => user.Username == username).FirstOrDefaultAsync();
+            return UserID.Id;
         }
     }
 }

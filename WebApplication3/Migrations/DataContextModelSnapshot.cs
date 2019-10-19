@@ -87,6 +87,23 @@ namespace WebApplication3.Migrations
                     b.ToTable("Quizs");
                 });
 
+            modelBuilder.Entity("WebApplication3.Models.EmailVerification", b =>
+                {
+                    b.Property<long>("vID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("vIsStatus");
+
+                    b.Property<string>("vLink");
+
+                    b.Property<long>("vUserId");
+
+                    b.HasKey("vID");
+
+                    b.ToTable("EmailVerifications");
+                });
+
             modelBuilder.Entity("WebApplication3.Models.Role", b =>
                 {
                     b.Property<int>("RoleID")
@@ -106,17 +123,31 @@ namespace WebApplication3.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<DateTime>("CreateDate");
+
+                    b.Property<string>("FirstName");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<string>("LastName");
+
                     b.Property<byte[]>("PasswordHash");
 
                     b.Property<byte[]>("PasswordSalt");
+
+                    b.Property<string>("ProfileImage");
 
                     b.Property<int>("RoleID");
 
                     b.Property<string>("Username");
 
+                    b.Property<long>("vID");
+
                     b.HasKey("Id");
 
                     b.HasIndex("RoleID");
+
+                    b.HasIndex("vID");
 
                     b.ToTable("Users");
                 });
@@ -150,6 +181,11 @@ namespace WebApplication3.Migrations
                     b.HasOne("WebApplication3.Models.Role", "Role")
                         .WithMany("Users")
                         .HasForeignKey("RoleID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("WebApplication3.Models.EmailVerification", "EmailVerification")
+                        .WithMany("Users")
+                        .HasForeignKey("vID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

@@ -46,9 +46,9 @@ namespace WebApplication3.Controllers
 
                 return StatusCode(201);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                return BadRequest(ex.InnerException);
             }
         }
 
