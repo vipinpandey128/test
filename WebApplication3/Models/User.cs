@@ -13,14 +13,14 @@ namespace WebApplication3.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string ProfileImage { get; set; }
-        public DateTime CreateDate { get; set; }
+        public DateTime CreateDate { get; set; } = DateTime.Now;
         public bool IsActive { get; set; }
         public int RoleID { get; set; }
 
         public virtual Role Role { get; set; }
 
-        public long vID { get; set; }
+        //public long vID { get; set; }
 
-        public virtual EmailVerification EmailVerification { get; set; }
+        //public virtual EmailVerification EmailVerification { get; set; }
     }
 }

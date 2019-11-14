@@ -14,46 +14,46 @@ namespace WebApplication3.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class RolesController : ControllerBase
+    public class MenusController : ControllerBase
     {
         private readonly DataContext _context;
 
-        public RolesController(DataContext context)
+        public MenusController(DataContext context)
         {
             _context = context;
         }
 
-        // GET: api/Roles
+        // GET: api/Menus
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Role>>> GetRoles()
+        public async Task<ActionResult<IEnumerable<Menu>>> GetMenus()
         {
-            return await _context.Roles.ToListAsync();
+            return await _context.Menus.ToListAsync();
         }
 
-        // GET: api/Roles/5
+        // GET: api/Menus/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Role>> GetRole(int id)
+        public async Task<ActionResult<Menu>> GetMenu(int id)
         {
-            var role = await _context.Roles.FindAsync(id);
+            var menu = await _context.Menus.FindAsync(id);
 
-            if (role == null)
+            if (menu == null)
             {
                 return NotFound();
             }
 
-            return role;
+            return menu;
         }
 
-        // PUT: api/Roles/5
+        // PUT: api/Menus/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutRole(int id, Role role)
+        public async Task<IActionResult> PutMenu(int id, Menu menu)
         {
-            if (id != role.RoleID)
+            if (id != menu.MenuID)
             {
                 return BadRequest();
             }
 
-            _context.Entry(role).State = EntityState.Modified;
+            _context.Entry(menu).State = EntityState.Modified;
 
             try
             {
@@ -61,7 +61,7 @@ namespace WebApplication3.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!RoleExists(id))
+                if (!MenuExists(id))
                 {
                     return NotFound();
                 }
@@ -74,39 +74,35 @@ namespace WebApplication3.Controllers
             return NoContent();
         }
 
-        // POST: api/Roles
+        // POST: api/Menus
         [HttpPost]
-        public async Task<ActionResult<Role>> PostRole(Role role)
+        public async Task<ActionResult<Menu>> PostMenu(Menu menu)
         {
-            if (_context.Roles.Where(urole=>urole.RoleName==role.RoleName).Count()>0)
-            {
-                return BadRequest();
-            }
-            _context.Roles.Add(role);
+            _context.Menus.Add(menu);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetRole", new { id = role.RoleID }, role);
+            return CreatedAtAction("GetMenu", new { id = menu.MenuID }, menu);
         }
 
-        // DELETE: api/Roles/5
+        // DELETE: api/Menus/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Role>> DeleteRole(int id)
+        public async Task<ActionResult<Menu>> DeleteMenu(int id)
         {
-            var role = await _context.Roles.FindAsync(id);
-            if (role == null)
+            var menu = await _context.Menus.FindAsync(id);
+            if (menu == null)
             {
                 return NotFound();
             }
 
-            _context.Roles.Remove(role);
+            _context.Menus.Remove(menu);
             await _context.SaveChangesAsync();
 
-            return role;
+            return menu;
         }
 
-        private bool RoleExists(int id)
+        private bool MenuExists(int id)
         {
-            return _context.Roles.Any(e => e.RoleID == id);
+            return _context.Menus.Any(e => e.MenuID == id);
         }
     }
 }

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication3.DbContexts;
 
 namespace WebApplication3.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20191016174849_db3")]
+    partial class db3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -93,8 +95,6 @@ namespace WebApplication3.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("eVerifiedDate");
-
                     b.Property<bool>("vIsStatus");
 
                     b.Property<string>("vLink");
@@ -104,40 +104,6 @@ namespace WebApplication3.Migrations
                     b.HasKey("vID");
 
                     b.ToTable("EmailVerifications");
-                });
-
-            modelBuilder.Entity("WebApplication3.Models.Menu", b =>
-                {
-                    b.Property<int>("MenuID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("MenuHeader");
-
-                    b.Property<string>("MenuItem");
-
-                    b.HasKey("MenuID");
-
-                    b.ToTable("Menus");
-                });
-
-            modelBuilder.Entity("WebApplication3.Models.MenuPermission", b =>
-                {
-                    b.Property<long>("mPID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("MenuID");
-
-                    b.Property<int>("RoleID");
-
-                    b.HasKey("mPID");
-
-                    b.HasIndex("MenuID");
-
-                    b.HasIndex("RoleID");
-
-                    b.ToTable("MenuPermissions");
                 });
 
             modelBuilder.Entity("WebApplication3.Models.Role", b =>
@@ -177,9 +143,13 @@ namespace WebApplication3.Migrations
 
                     b.Property<string>("Username");
 
+                    b.Property<long>("vID");
+
                     b.HasKey("Id");
 
                     b.HasIndex("RoleID");
+
+                    b.HasIndex("vID");
 
                     b.ToTable("Users");
                 });
@@ -208,24 +178,16 @@ namespace WebApplication3.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("WebApplication3.Models.MenuPermission", b =>
-                {
-                    b.HasOne("WebApplication3.Models.Menu", "Menu")
-                        .WithMany()
-                        .HasForeignKey("MenuID")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("WebApplication3.Models.Role", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleID")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("WebApplication3.Models.User", b =>
                 {
                     b.HasOne("WebApplication3.Models.Role", "Role")
                         .WithMany("Users")
                         .HasForeignKey("RoleID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("WebApplication3.Models.EmailVerification", "EmailVerification")
+                        .WithMany("Users")
+                        .HasForeignKey("vID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
