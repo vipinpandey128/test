@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using WebApplication3.Models;
 
 namespace WebApplication3.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class RolesController : ControllerBase
@@ -76,6 +78,10 @@ namespace WebApplication3.Controllers
         [HttpPost]
         public async Task<ActionResult<Role>> PostRole(Role role)
         {
+            if (_context.Roles.Where(urole=>urole.RoleName==role.RoleName).Count()>0)
+            {
+                return BadRequest();
+            }
             _context.Roles.Add(role);
             await _context.SaveChangesAsync();
 
