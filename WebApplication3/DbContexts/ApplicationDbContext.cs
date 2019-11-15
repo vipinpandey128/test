@@ -6,7 +6,9 @@ namespace WebApplication3.DbContexts
 {
     public class DataContext : DbContext
     {
-        public DataContext(DbContextOptions<DataContext> options) : base(options) { }
+        public DataContext(DbContextOptions<DataContext> options) : base(options) {
+
+        }
 
         public DbSet<User> Users { get; set; }
         public DbSet<Quiz> Quizs { get; set; }
@@ -17,6 +19,7 @@ namespace WebApplication3.DbContexts
         public DbSet<EmailVerification> EmailVerifications { get; set; }
         public DbSet<Menu> Menus { get; set; }
         public DbSet<MenuPermission> MenuPermissions { get; set; }
+        public DbSet<Blog> Blogs { get; set; }
 
 
     }

@@ -10,11 +10,11 @@ namespace WebApplication3.Models
     {
         [Key]
         public long mPID { get; set; }
+
         public int MenuID { get; set; }
-
         public virtual Menu Menu { get; set; }
-        public int RoleID { get; set; }
 
+        public int RoleID { get; set; }
         public virtual Role Role { get; set; }
     }
 }

@@ -87,6 +87,31 @@ namespace WebApplication3.Migrations
                     b.ToTable("Quizs");
                 });
 
+            modelBuilder.Entity("WebApplication3.Models.Blog", b =>
+                {
+                    b.Property<long>("BlogId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("BlogImage");
+
+                    b.Property<string>("BlogText");
+
+                    b.Property<string>("BlogTitle");
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<long>("Id");
+
+                    b.Property<bool>("IsActive");
+
+                    b.HasKey("BlogId");
+
+                    b.HasIndex("Id");
+
+                    b.ToTable("Blogs");
+                });
+
             modelBuilder.Entity("WebApplication3.Models.EmailVerification", b =>
                 {
                     b.Property<long>("vID")
@@ -205,6 +230,14 @@ namespace WebApplication3.Migrations
                     b.HasOne("WebApplication3.Model.Quiz", "Quiz")
                         .WithMany("Questions")
                         .HasForeignKey("QuizID")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("WebApplication3.Models.Blog", b =>
+                {
+                    b.HasOne("WebApplication3.Models.User", "Users")
+                        .WithMany()
+                        .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

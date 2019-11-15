@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WebApplication3.Migrations
 {
-    public partial class db3 : Migration
+    public partial class db9 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -16,11 +16,26 @@ namespace WebApplication3.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     vLink = table.Column<string>(nullable: true),
                     vUserId = table.Column<long>(nullable: false),
-                    vIsStatus = table.Column<bool>(nullable: false)
+                    vIsStatus = table.Column<bool>(nullable: false),
+                    eVerifiedDate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_EmailVerifications", x => x.vID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Menus",
+                columns: table => new
+                {
+                    MenuID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    MenuHeader = table.Column<string>(nullable: true),
+                    MenuItem = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Menus", x => x.MenuID);
                 });
 
             migrationBuilder.CreateTable(
@@ -72,6 +87,32 @@ namespace WebApplication3.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "MenuPermissions",
+                columns: table => new
+                {
+                    mPID = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    MenuID = table.Column<int>(nullable: false),
+                    RoleID = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MenuPermissions", x => x.mPID);
+                    table.ForeignKey(
+                        name: "FK_MenuPermissions_Menus_MenuID",
+                        column: x => x.MenuID,
+                        principalTable: "Menus",
+                        principalColumn: "MenuID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MenuPermissions_Roles_RoleID",
+                        column: x => x.RoleID,
+                        principalTable: "Roles",
+                        principalColumn: "RoleID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -85,8 +126,7 @@ namespace WebApplication3.Migrations
                     ProfileImage = table.Column<string>(nullable: true),
                     CreateDate = table.Column<DateTime>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
-                    RoleID = table.Column<int>(nullable: false),
-                    vID = table.Column<long>(nullable: false)
+                    RoleID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -96,12 +136,6 @@ namespace WebApplication3.Migrations
                         column: x => x.RoleID,
                         principalTable: "Roles",
                         principalColumn: "RoleID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Users_EmailVerifications_vID",
-                        column: x => x.vID,
-                        principalTable: "EmailVerifications",
-                        principalColumn: "vID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -145,15 +179,54 @@ namespace WebApplication3.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Blogs",
+                columns: table => new
+                {
+                    BlogId = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    BlogText = table.Column<string>(nullable: true),
+                    BlogImage = table.Column<string>(nullable: true),
+                    BlogTitle = table.Column<string>(nullable: true),
+                    IsActive = table.Column<bool>(nullable: false),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    Id = table.Column<long>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Blogs", x => x.BlogId);
+                    table.ForeignKey(
+                        name: "FK_Blogs_Users_Id",
+                        column: x => x.Id,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Answers_QuestionID",
                 table: "Answers",
                 column: "QuestionID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Blogs_Id",
+                table: "Blogs",
+                column: "Id");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Choices_QuestionID",
                 table: "Choices",
                 column: "QuestionID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MenuPermissions_MenuID",
+                table: "MenuPermissions",
+                column: "MenuID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MenuPermissions_RoleID",
+                table: "MenuPermissions",
+                column: "RoleID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Questions_QuizID",
@@ -164,11 +237,6 @@ namespace WebApplication3.Migrations
                 name: "IX_Users_RoleID",
                 table: "Users",
                 column: "RoleID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_vID",
-                table: "Users",
-                column: "vID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -177,7 +245,16 @@ namespace WebApplication3.Migrations
                 name: "Answers");
 
             migrationBuilder.DropTable(
+                name: "Blogs");
+
+            migrationBuilder.DropTable(
                 name: "Choices");
+
+            migrationBuilder.DropTable(
+                name: "EmailVerifications");
+
+            migrationBuilder.DropTable(
+                name: "MenuPermissions");
 
             migrationBuilder.DropTable(
                 name: "Users");
@@ -186,10 +263,10 @@ namespace WebApplication3.Migrations
                 name: "Questions");
 
             migrationBuilder.DropTable(
-                name: "Roles");
+                name: "Menus");
 
             migrationBuilder.DropTable(
-                name: "EmailVerifications");
+                name: "Roles");
 
             migrationBuilder.DropTable(
                 name: "Quizs");
